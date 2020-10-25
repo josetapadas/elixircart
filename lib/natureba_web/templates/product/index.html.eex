@@ -18,6 +18,12 @@
       <td><%= product.price %></td>
 
       <td>
+        <%= if assigns[:natureba_session] do %>
+          <span><%= link "+", to: Routes.cart_path(@conn, :update, product.id), method: :put %></span>
+          <%= if in_cart?(assigns[:natureba_session], product.id) do %>
+            <span><%= link "-", to: Routes.cart_path(@conn, :delete, product.id), method: :delete %></span>
+          <% end %>
+        <% end %>
         <span><%= link "Show", to: Routes.product_path(@conn, :show, product) %></span>
         <span><%= link "Edit", to: Routes.product_path(@conn, :edit, product) %></span>
         <span><%= link "Delete", to: Routes.product_path(@conn, :delete, product), method: :delete, data: [confirm: "Are you sure?"] %></span>

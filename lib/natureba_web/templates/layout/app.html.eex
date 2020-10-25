@@ -30,7 +30,7 @@
 
       <%= if @conn.assigns[:natureba_session] do %>
         <div>
-          <%= cart_item_count(@natureba_session) %> item(s) in your cart
+          <%= cart_item_count(@natureba_session) %> item(s) in your cart - <%= cart_price(@natureba_session) %> CHF
         </div>
       <% end %>
 
