@@ -17,7 +17,8 @@ defmodule Natureba.Application do
       NaturebaWeb.Endpoint,
       # Start a worker by calling: Natureba.Worker.start_link(arg)
       # {Natureba.Worker, arg}
-      Natureba.Workers.CartAgent
+      Natureba.Workers.CartSupervisor,
+      { Registry, [keys: :unique, name: :cart_registry] }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -3,13 +3,18 @@ defmodule Natureba.Workers.CartAgent do
 
   require Logger
 
-  def start_link(_state) do
-    Agent.start_link(fn -> %{} end, name: __MODULE__)
+  @spec start_link(any) :: {:error, any} | {:ok, pid}
+
+  def start_link({ cart_id, item }) do
+    Agent.start_link(fn -> append_item(%{}, cart_id, item) end, name: via_tuple(cart_id) )
   end
 
   def add_item(cart_id, item) do
-    Agent.cast(__MODULE__, fn(state) ->
-      Map.update(
+    Agent.cast(via_tuple(cart_id), fn(state) -> append_item(state, cart_id, item) end)
+  end
+
+  defp append_item(state, cart_id, item) do
+    Map.update(
         state,
         cart_id,
         %{
@@ -30,11 +35,10 @@ defmodule Natureba.Workers.CartAgent do
           )
         end
       )
-    end)
   end
 
   def delete_item(cart_id, item) do
-    Agent.update(__MODULE__, fn(state) ->
+    Agent.update(via_tuple(cart_id), fn(state) ->
       Map.update(
         state,
         cart_id,
@@ -71,6 +75,10 @@ defmodule Natureba.Workers.CartAgent do
   end
 
   def get_cart(cart_id) do
-    Agent.get(__MODULE__, fn(state) -> state[cart_id] end)
+    Agent.get(via_tuple(cart_id), fn(state) -> state[cart_id] end)
+  end
+
+  defp via_tuple(cart_id) do
+    {:via, Registry, {:cart_registry, cart_id}}
   end
 end

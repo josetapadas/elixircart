@@ -1,10 +1,10 @@
 defmodule NaturebaWeb.LayoutView do
   use NaturebaWeb, :view
 
-  alias Natureba.Workers.CartAgent
+  alias Natureba.Carts
 
   def cart_item_count(natureba_session) do
-    current_cart =  CartAgent.get_cart(natureba_session)
+    current_cart = Carts.get(natureba_session)
     case current_cart[:count] do
       nil ->
         0
@@ -14,7 +14,7 @@ defmodule NaturebaWeb.LayoutView do
   end
 
   def cart_price(natureba_session) do
-    current_cart = CartAgent.get_cart(natureba_session)
+    current_cart = Carts.get(natureba_session)
     case current_cart[:total_price] do
       nil ->
         0

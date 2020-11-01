@@ -1,9 +1,9 @@
 defmodule NaturebaWeb.ProductView do
   use NaturebaWeb, :view
-  alias Natureba.Workers.CartAgent
+  alias Natureba.Carts
 
   def in_cart?(current_session, product_id) do
-    current_cart = CartAgent.get_cart(current_session)
+    current_cart = Carts.get(current_session)
     if current_cart[:items] do
       current_cart[:items]
       |> Map.keys()
